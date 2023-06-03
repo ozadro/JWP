@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cart</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">JWP Project</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">         <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="index">Home</a>
+            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="viewArticle">View Articles</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="viewCategory">View Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="viewCart">View Cart</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="viewPurchaseHistory">View Purchase History</a>
+                </li>
+
+            </ul>
+        </div>
+        <div >
+            <a class="btn btn-danger" href="cleanSession">Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+<table class="table">
+    <thead>
+    <tr>
+        <th> Cart: </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${carts.empty}">
+        <td colspan="2"> No Cart products Available </td>
+    </tr>
+    <tr th:each="cart : ${carts}">
+        <td><span th:text="${cart.article.name}"> Name </span></td>
+        <td><label>Price:</label><label>$</label><span th:text="${cart.article.price}"> Price </span></td>
+        <form th:action="@{/updateProduct/{id}(id=${cart.id})}" method="post">
+        <td><label>Quantity:</label><input type="number" min="1" id="quantity" name="quantity" th:value="${cart.quantity}"/></td>
+        <td><input class="btn btn-success" type="submit" value="Update Product"></td>
+        </form>
+        <td><a class="btn btn-success" th:href="@{/deleteProduct/{id}(id=${cart.id})}">Remove from cart</a></td>
+    </tr>
+
+    </tbody>
+</table>
+    <label>Total Price: $<p id="totalPrice" th:text="${totalPrice}"></p></label>
+<br>
+<button class="btn btn-secondary mb-3" type="button" id="RemoveAll" onclick="deleteAllFromCart()">Remove all from cart</button>
+
+    <form th:action="@{/success}" method="post">
+        <div id="paypal-button-container"></div>
+    </form>
+    <form th:action="@{/success}" method="post">
+        <input name="type" type="hidden" value="1">
+   <input type="submit" class="btn btn-secondary" value="Pay with cash on delivery">
+    </form>
+</div>
+<script src="https://www.paypal.com/sdk/js?client-id=AX3zDU13b-kb8BaGCtQTpvYdKzUzqdODyzVrr3yszKH1LKCFq_WLbAF65QRNZfj0MsHQAPJWau1NshGX"></script>
+<script th:src="@{/js/viewCart.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
